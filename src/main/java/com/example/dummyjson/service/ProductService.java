@@ -1,13 +1,13 @@
 package com.example.dummyjson.service;
 
 import com.example.dummyjson.dto.Product;
+import com.example.dummyjson.dto.ProductResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -19,8 +19,10 @@ public class ProductService {
     private RestTemplate restTemplate;
 
     public List<Product> getAllProducts() {
-        Product[] products = restTemplate.getForObject(BASE_URL, Product[].class);
-        return Arrays.asList(products);
+
+        System.out.println("Java version: " + System.getProperty("java.version"));
+        ProductResponse response = restTemplate.getForObject(BASE_URL, ProductResponse.class);
+        return response != null ? Arrays.asList(response.getProducts()) : Collections.emptyList();
     }
 
     public Product getProductById(Long id) {

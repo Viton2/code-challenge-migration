@@ -1,7 +1,7 @@
 package com.example.dummyjson.service;
 
 import com.example.dummyjson.dto.Product;
-import org.junit.Before;
+import com.example.dummyjson.dto.ProductResponse;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -9,7 +9,6 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -35,7 +34,9 @@ public class ProductServiceTest {
         product2.setTitle("Product 2");
 
         Product[] products = {product1, product2};
-        when(restTemplate.getForObject("https://dummyjson.com/products", Product[].class)).thenReturn(products);
+        ProductResponse productResponse = new ProductResponse(products);
+
+        when(restTemplate.getForObject("https://dummyjson.com/products", ProductResponse.class)).thenReturn(productResponse);
 
         List<Product> result = productService.getAllProducts();
         assertEquals(2, result.size());
