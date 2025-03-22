@@ -2,20 +2,25 @@ package com.example.dummyjson.actuator;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
+import static org.hamcrest.Matchers.equalTo;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureWebTestClient
 public class ActuatorHealthCheckTest {
 
-    @Autowired
-    private WebTestClient webClient;
+        @Autowired
+        private WebTestClient webTestClient;
 
-    @Test
-    public void shouldReturn200WhenSendingRequestToManagementEndpoint(){
-        int port = 9001;
-        webClient.get().uri("http://localhost:"+ port +"/health").exchange().expectStatus().isOk();
-    }
-
+        @Test
+        public void testHealthEndpoint() {
+            webTestClient.get().uri("/health")
+                    .exchange()
+                    .expectStatus().isOk()
+                    .expectBody()
+                    .jsonPath("$.status").value(equalTo("UP")); // Verifica se o status está "UP"
+        }
 }
