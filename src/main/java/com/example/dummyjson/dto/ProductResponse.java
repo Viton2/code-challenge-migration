@@ -1,17 +1,19 @@
 package com.example.dummyjson.dto;
 
+import java.util.List;
+
 public class ProductResponse {
 
-    private Product[] products;
+    private List<Product> products;
 
-    public Product[] getProducts() {
+    public List<Product> getProducts() {
         return products;
     }
 
     public ProductResponse() {
     }
 
-    public ProductResponse(Product[] products) {
+    public ProductResponse(List<Product> products) {
         this.products = products;
     }
 }
