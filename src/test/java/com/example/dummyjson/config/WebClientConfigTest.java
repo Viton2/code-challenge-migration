@@ -14,7 +14,6 @@ import javax.net.ssl.SSLException;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
-@TestPropertySource(properties = "DummyURL=https://api.dummyjson.com")
 public class WebClientConfigTest {
 
     @Autowired

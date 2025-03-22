@@ -1,1 +1,4 @@
-dummyjson-url: https://dummyjson.com
+dummy-url: "https://api.dummyjson.com"
+spring:
+  profiles:
+    active: test

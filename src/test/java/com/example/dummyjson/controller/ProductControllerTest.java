@@ -17,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
-@TestPropertySource(properties = "DummyURL=https://api.dummyjson.com")
 public class ProductControllerTest {
 
     @InjectMocks
@@ -28,17 +27,10 @@ public class ProductControllerTest {
 
     @Test
     public void testGetAllProducts() {
-        Product product1 = new Product();
-        product1.setId(1L);
-        product1.setTitle("Product 1");
-
-        Product product2 = new Product();
-        product2.setId(2L);
-        product2.setTitle("Product 2");
-
+        Product product1 = new Product(1L, "Product 1", "Produto 1", 10.0);
+        Product product2 = new Product(2L, "Product 2", "Produto 2", 20.0);
         List<Product> products = Arrays.asList(product1, product2);
         when(productService.getAllProducts()).thenReturn(products);
-
         List<Product> result = productController.getAllProducts();
         assertEquals(2, result.size());
         assertEquals("Product 1", result.get(0).getTitle());
@@ -46,12 +38,8 @@ public class ProductControllerTest {
 
     @Test
     public void testGetProductById() {
-        Product product = new Product();
-        product.setId(1L);
-        product.setTitle("Product 1");
-
+        Product product = new Product(1L, "Product 1", "Produto 1", 10.0);
         when(productService.getProductById(1L)).thenReturn(product);
-
         Product result = productController.getProductById(1L);
         assertEquals("Product 1", result.getTitle());
     }
