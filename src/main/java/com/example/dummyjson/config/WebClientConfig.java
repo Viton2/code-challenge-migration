@@ -17,7 +17,7 @@ import javax.net.ssl.SSLException;
 @Configuration
 public class WebClientConfig {
 
-    @Value("${DummyURL}")
+    @Value("${dummy-url}")
     private String BASE_URL;
 
     @Bean

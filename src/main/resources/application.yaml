@@ -1,4 +1,14 @@
 server:
   port: 8080
+management:
+  server:
+    port: 9001
+    address: 127.0.0.1
 
-dummyjson-url: ${DummyURL}
+  endpoints:
+    web:
+      exposure:
+        include: health
+      base-path: /
+
+dummy-url: "https://api.dummyjson.com"
