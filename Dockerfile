@@ -6,6 +6,7 @@ WORKDIR /app
 COPY pom.xml ./
 COPY src ./src
 
+
 # Baixa as dependências do Maven e compila o projeto
 RUN mvn clean package -DskipTests
 
