@@ -8,6 +8,10 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 
 import static org.hamcrest.Matchers.equalTo;
 
+/**
+ * Classe de teste que verifica a saúde do endpoint Actuator.
+ * Utiliza {@link WebTestClient} para testar endpoints de forma reativa.
+ */
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
 public class ActuatorHealthCheckTest {
@@ -15,12 +19,16 @@ public class ActuatorHealthCheckTest {
         @Autowired
         private WebTestClient webTestClient;
 
+        /**
+         * Testa o endpoint "/health" do Actuator.
+         * Verifica se o endpoint retorna o status HTTP 200 (OK) e se o status do sistema é "UP".
+         */
         @Test
         public void testHealthEndpoint() {
-            webTestClient.get().uri("/health")
-                    .exchange()
-                    .expectStatus().isOk()
-                    .expectBody()
-                    .jsonPath("$.status").value(equalTo("UP")); // Verifica se o status está "UP"
+                webTestClient.get().uri("/health")
+                        .exchange()
+                        .expectStatus().isOk()
+                        .expectBody()
+                        .jsonPath("$.status").value(equalTo("UP")); // Verifica se o status está "UP"
         }
 }
