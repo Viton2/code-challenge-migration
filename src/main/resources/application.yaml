@@ -1,14 +1,16 @@
 server:
   port: 8080
+
+# Actuator configuration
 management:
   server:
     port: 9001
-    address: 127.0.0.1
-
+    address: 0.0.0.0
   endpoints:
     web:
       exposure:
         include: health
       base-path: /
 
-dummy-url: "https://api.dummyjson.com"
+# Dummy API URL as parameter
+dummy-url: "https://dummyjson.com"

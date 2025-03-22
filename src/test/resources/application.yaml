@@ -1,4 +1,4 @@
-dummy-url: "https://api.dummyjson.com"
+dummy-url: "https://dummyjson.com"
 spring:
   profiles:
     active: test
