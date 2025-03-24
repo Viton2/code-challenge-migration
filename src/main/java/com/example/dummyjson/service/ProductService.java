@@ -1,30 +1,56 @@
 package com.example.dummyjson.service;
 
 import com.example.dummyjson.dto.Product;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.dummyjson.dto.ProductResponse;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.Collections;
 import java.util.List;
 
+/**
+ * Serviço responsável por consumir APIs relacionadas a produtos usando WebClient.
+ */
 @Service
 public class ProductService {
 
-    private final String BASE_URL = "https://dummyjson.com/products";
+    private final WebClient webClient;
 
-    @Autowired
-    private RestTemplate restTemplate;
-
-    public List<Product> getAllProducts() {
-        Product[] products = restTemplate.getForObject(BASE_URL, Product[].class);
-        return Arrays.asList(products);
+    /**
+     * Construtor que inicializa o WebClient.
+     *
+     * @param webClient Instância de {@link WebClient} usada para realizar chamadas HTTP.
+     */
+    public ProductService(WebClient webClient) {
+        this.webClient = webClient;
     }
 
+    /**
+     * Obtém a lista de todos os produtos.
+     *
+     * @return Uma lista de {@link Product}. Retorna uma lista vazia se a resposta for nula.
+     */
+    public List<Product> getAllProducts() {
+        ProductResponse response = webClient.get()
+                .uri("/products")
+                .retrieve()
+                .bodyToMono(ProductResponse.class)
+                .block();
+        return response != null ? response.getProducts() : Collections.emptyList();
+    }
+
+    /**
+     * Obtém os detalhes de um produto específico com base no ID fornecido.
+     *
+     * @param id O ID do produto a ser buscado.
+     * @return Uma instância de {@link Product} correspondente ao ID fornecido.
+     */
     public Product getProductById(Long id) {
-        String url = BASE_URL + "/" + id;
-        return restTemplate.getForObject(url, Product.class);
+        return webClient.get()
+                .uri("/products/{id}", id)
+                .retrieve()
+                .bodyToMono(Product.class)
+                .block();
     }
 }
+

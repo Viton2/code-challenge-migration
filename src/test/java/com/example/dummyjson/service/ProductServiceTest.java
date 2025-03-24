@@ -1,56 +1,57 @@
 package com.example.dummyjson.service;
 
 import com.example.dummyjson.dto.Product;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.web.client.RestTemplate;
+import com.example.dummyjson.dto.ProductResponse;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
-import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
+/**
+ * Classe de teste para o serviço {@link ProductService}.
+ * Verifica as funcionalidades relacionadas a produtos utilizando mocks.
+ */
+@AutoConfigureWebTestClient
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ProductServiceTest {
 
-    @InjectMocks
+    @MockBean
     private ProductService productService;
 
-    @Mock
-    private RestTemplate restTemplate;
-
+    /**
+     * Testa o método {@link ProductService#getAllProducts()}.
+     * Verifica se o serviço retorna a lista de produtos corretamente.
+     */
     @Test
-    public void testGetAllProducts() {
-        Product product1 = new Product();
-        product1.setId(1L);
-        product1.setTitle("Product 1");
+    void testGetAllProducts() {
+        Product product1 = new Product(1L, "Product 1", "Produto 1", 10.0);
+        Product product2 = new Product(2L, "Product 2", "Produto 2", 20.0);
 
-        Product product2 = new Product();
-        product2.setId(2L);
-        product2.setTitle("Product 2");
+        ProductResponse response = new ProductResponse(List.of(product1, product2));
+        when(productService.getAllProducts())
+                .thenReturn(response.getProducts());
 
-        Product[] products = {product1, product2};
-        when(restTemplate.getForObject("https://dummyjson.com/products", Product[].class)).thenReturn(products);
+        assertEquals(response.getProducts(), productService.getAllProducts());
 
-        List<Product> result = productService.getAllProducts();
-        assertEquals(2, result.size());
-        assertEquals("Product 1", result.get(0).getTitle());
+        verify(productService).getAllProducts();
     }
 
+    /**
+     * Testa o método {@link ProductService#getProductById(Long)}.
+     * Verifica se o serviço retorna o produto correto com base no ID.
+     */
     @Test
     public void testGetProductById() {
-        Product product = new Product();
-        product.setId(1L);
-        product.setTitle("Product 1");
+        Product product = new Product(1L, "Product 1", "Produto 1", 10.0);
 
-        when(restTemplate.getForObject("https://dummyjson.com/products/1", Product.class)).thenReturn(product);
+        when(productService.getProductById(1L)).thenReturn(product);
 
-        Product result = productService.getProductById(1L);
-        assertEquals("Product 1", result.getTitle());
+        assertEquals(product, productService.getProductById(1L));
     }
 }

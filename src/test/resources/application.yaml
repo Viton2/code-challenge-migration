@@ -1,0 +1,11 @@
+dummy-url: "https://dummyjson.com"
+spring:
+  profiles:
+    active: test
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+      base-path: /
